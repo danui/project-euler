@@ -2,6 +2,7 @@ env = Environment()
 
 util_o = env.Object('util.c')
 words_o = env.Object('words.c');
+sudoku_o = env.Object('sudoku.c');
 
 env.Program('out/problem-31', 'problem-31.c')
 env.Program('out/problem-48', 'problem-48.c')
@@ -13,4 +14,4 @@ env.Program('out/random_prime', ['random_prime.c', util_o])
 env.Program('out/problem-26', ['problem-26.c', util_o])
 env.Program('out/problem-52', ['problem-52.c', util_o])
 env.Program('out/problem-59', ['problem-59.c', words_o])
-env.Program('out/problem-96', ['problem-96.c'])
+env.Program('out/problem-96', ['problem-96.c', sudoku_o])
