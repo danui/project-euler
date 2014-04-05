@@ -4,6 +4,23 @@
 
 #include "sudoku.h"
 
+struct slot;
+struct group;
+
+struct slot {
+    int id;
+    int number;
+    int * has_candidate;
+    int num_candidates;
+    struct group ** groups;
+};
+
+void slot_init(struct slot * slot, int id);
+void slot_put(struct slot * slot, int number);
+void slot_candidates(struct slot * slot, int * ret_candidates);
+
+
+
 struct sudoku {
     int value_grid[9*9];
     int candidate_grid[9*9*9];
@@ -68,4 +85,7 @@ void sudoku_solve(struct sudoku * S,
     void (*on_found)(struct sudoku * S, int I, int J, int value))
 {
     /* TODO: implement? */
+    for (T = S->subproblems; T != NULL; T = T->next) {
+        resolve(T, S);
+    }
 }
