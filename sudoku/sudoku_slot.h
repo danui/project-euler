@@ -19,7 +19,7 @@ static inline int sudoku_slot_id_from_rowcol(int row, int col)
     return row * 9 + col;
 }
 
-struct sudoku_slot * new_slot(int id);
+struct sudoku_slot * new_sudoku_slot(int id);
 void sudoku_slot_free(struct sudoku_slot * slot);
 
 int sudoku_slot_id(struct sudoku_slot * slot);

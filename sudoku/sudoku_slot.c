@@ -14,7 +14,7 @@ struct sudoku_slot
     int group_count;
 };
 
-struct sudoku_slot * new_slot(int id)
+struct sudoku_slot * new_sudoku_slot(int id)
 {
     struct sudoku_slot * slot = calloc(1, sizeof(struct sudoku_slot));
     int i, v;

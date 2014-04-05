@@ -26,7 +26,7 @@ struct sudoku * new_sudoku(void)
     struct sudoku * S = calloc(1, sizeof(struct sudoku));
     int i, j, k;
     for (i=0; i<81; ++i)
-        S->slot[i] = new_slot(i);
+        S->slot[i] = new_sudoku_slot(i);
     for (i=0; i<27; ++i)
         S->group[i] = new_sudoku_group(i);
 
