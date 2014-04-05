@@ -8,6 +8,7 @@ sudoku_env['CFLAGS'] = ['-Isudoku', '-I.']
 sudoku_objs = [
 	sudoku_env.Object('sudoku/sudoku.c'),
 	sudoku_env.Object('sudoku/sudoku_slot.c'),
+	sudoku_env.Object('sudoku/sudoku_group.c'),
 ];
 
 env.Program('out/problem-31', 'problem-31.c')

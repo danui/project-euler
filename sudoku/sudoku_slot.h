@@ -22,11 +22,13 @@ static inline int sudoku_slot_id_from_rowcol(int row, int col)
 struct sudoku_slot * new_slot(int id);
 void sudoku_slot_free(struct sudoku_slot * slot);
 
+int sudoku_slot_id(struct sudoku_slot * slot);
+
 /**
  * Each slot is associated with 3 groups.  This should be called exactly
  * 3 times with appropriate groups before running sudoku_solve().
  */
-void sudoku_slot_register_group(struct sudoku_slot * slot, struct sudoku_group * group);
+void sudoku_slot_add_group(struct sudoku_slot * slot, struct sudoku_group * group);
 
 /**
  * Sets a slots number and removes all candidates.

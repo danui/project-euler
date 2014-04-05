@@ -36,11 +36,16 @@ void sudoku_slot_free(struct sudoku_slot * slot)
     free(slot);
 }
 
+int sudoku_slot_id(struct sudoku_slot * slot)
+{
+    return slot->id;
+}
+
 /**
  * Each slot is associated with 3 groups.  This should be called exactly
  * 3 times with appropriate groups before running sudoku_solve().
  */
-void sudoku_slot_register_group(struct sudoku_slot * slot, struct sudoku_group * group)
+void sudoku_slot_add_group(struct sudoku_slot * slot, struct sudoku_group * group)
 {
     if (slot->group_count >= 3) {
         fprintf(stderr, __FMT__ "slot group count out of bounds\n", __OUT__);
