@@ -7,8 +7,6 @@ struct sudoku * new_sudoku(void);
 
 void sudoku_free(struct sudoku * S);
 
-void sudoku_reset(struct sudoku * S);
-
 /**
  * Put value at (I,J).  I and J are 1-based indices; i.e. 1..9
  */

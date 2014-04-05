@@ -14,25 +14,22 @@ struct sudoku
 struct sudoku * new_sudoku(void)
 {
     struct sudoku * S = calloc(1, sizeof(struct sudoku));
-    sudoku_reset(S);
+    int i;
+    for (i=0; i<81; ++i)
+        S->slot[i] = new_slot(i);
+    /* TODO: make groups and register them to slots */
     return S;
 }
 
 void sudoku_free(struct sudoku * S)
 {
+    int i;
     if (S) {
+        for (i=0; i<81; ++i)
+            if (S->slot[i])
+                slot_free(S->slot[i]);
+        /* TODO: free groups */
         free(S);
-    }
-}
-
-void sudoku_reset(struct sudoku * S)
-{
-    int i, j, k;
-
-    for (i=0; i<81; ++i) {
-        if (S->slot[i])
-            slot_free(S->slot[i]);
-        S->slot[i] = new_slot(i);
     }
 }
 

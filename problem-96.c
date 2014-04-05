@@ -35,7 +35,6 @@ void load_puzzle(int expected_id, FILE * fs, struct sudoku * S)
     char line[16];
     int id;
     int i, j;
-    sudoku_reset(S);
     fscanf(fs, "%s %d", line, &id);
     if (0 != strcmp("Grid", line))
     {
@@ -69,15 +68,15 @@ int main(void)
     struct sudoku * S;
     char label[100];
 
-    S = new_sudoku();
     fs = fopen("sudoku.txt", "r");
     if (fs == NULL)
         exit(EXIT_FAILURE);
     for (id=1; id <= 50; ++id)
     {
+        S = new_sudoku();
         load_puzzle(id, fs, S);
         print_puzzle(id, "loaded", S);
+        sudoku_free(S);
     }
-    sudoku_free(S);
     exit(EXIT_SUCCESS);
 }
