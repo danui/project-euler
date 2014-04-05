@@ -85,7 +85,4 @@ void sudoku_solve(struct sudoku * S,
     void (*on_found)(struct sudoku * S, int I, int J, int value))
 {
     /* TODO: implement? */
-    for (T = S->subproblems; T != NULL; T = T->next) {
-        resolve(T, S);
-    }
 }
