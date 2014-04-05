@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "slot.h"
+#include "sudoku_slot.h"
 #include "fmt.h"
 
 struct sudoku_slot

@@ -4,7 +4,7 @@
 
 #include "sudoku.h"
 
-#include "slot.h"
+#include "sudoku_slot.h"
 
 struct sudoku
 {
