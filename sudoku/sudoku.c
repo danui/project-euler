@@ -8,7 +8,7 @@
 
 struct sudoku
 {
-    struct slot *slot[81];
+    struct sudoku_slot *slot[81];
 };
 
 struct sudoku * new_sudoku(void)
@@ -27,7 +27,7 @@ void sudoku_free(struct sudoku * S)
     if (S) {
         for (i=0; i<81; ++i)
             if (S->slot[i])
-                slot_free(S->slot[i]);
+                sudoku_slot_free(S->slot[i]);
         /* TODO: free groups */
         free(S);
     }
@@ -35,18 +35,17 @@ void sudoku_free(struct sudoku * S)
 
 void sudoku_put(struct sudoku * S, int row, int col, int number)
 {
-    int i = slot_id_from_rowcol(row, col);
-    slot_set_number(S->slot[i], number);
+    int i = sudoku_slot_id_from_rowcol(row, col);
+    sudoku_slot_set_number(S->slot[i], number);
 }
 
 int sudoku_get(struct sudoku * S, int row, int col)
 {
-    int i = slot_id_from_rowcol(row, col);
-    return slot_number(S->slot[i]);
+    int i = sudoku_slot_id_from_rowcol(row, col);
+    return sudoku_slot_number(S->slot[i]);
 }
 
-void sudoku_solve(struct sudoku * S,
-    void (*on_found)(struct sudoku * S, int I, int J, int value))
+void sudoku_solve(struct sudoku * S, struct sudoku_callbacks * callbacks)
 {
     /* TODO: implement? */
 }

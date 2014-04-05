@@ -2,7 +2,7 @@
 #include "slot.h"
 #include "fmt.h"
 
-struct slot
+struct sudoku_slot
 {
     int id;
     int row;
@@ -10,17 +10,17 @@ struct slot
     int number;
     int has_candidate[10];
     int candidate_count;
-    struct group *group[3];
+    struct sudoku_group *group[3];
     int group_count;
 };
 
-struct slot * new_slot(int id)
+struct sudoku_slot * new_slot(int id)
 {
-    struct slot * slot = calloc(1, sizeof(struct slot));
+    struct sudoku_slot * slot = calloc(1, sizeof(struct sudoku_slot));
     int i, v;
     slot->id = id;
-    slot->row = slot_row_from_id(id);
-    slot->col = slot_col_from_id(id);
+    slot->row = sudoku_slot_row_from_id(id);
+    slot->col = sudoku_slot_col_from_id(id);
     slot->number = 0;
     for (v = 1; v <= 9; ++v)
         slot->has_candidate[v] = 1;
@@ -31,7 +31,7 @@ struct slot * new_slot(int id)
     return slot;
 }
 
-void slot_free(struct slot * slot)
+void sudoku_slot_free(struct sudoku_slot * slot)
 {
     free(slot);
 }
@@ -40,7 +40,7 @@ void slot_free(struct slot * slot)
  * Each slot is associated with 3 groups.  This should be called exactly
  * 3 times with appropriate groups before running sudoku_solve().
  */
-void slot_register_group(struct slot * slot, struct group * group)
+void sudoku_slot_register_group(struct sudoku_slot * slot, struct sudoku_group * group)
 {
     if (slot->group_count >= 3) {
         fprintf(stderr, __FMT__ "slot group count out of bounds\n", __OUT__);
@@ -52,7 +52,7 @@ void slot_register_group(struct slot * slot, struct group * group)
 /**
  * Sets a slots number and removes all candidates.
  */
-void slot_set_number(struct slot * slot, int number)
+void sudoku_slot_set_number(struct sudoku_slot * slot, int number)
 {
     int v;
     if (slot->number == 0) {
@@ -74,7 +74,7 @@ void slot_set_number(struct slot * slot, int number)
 /**
  * @return slot number.  0 means no number.
  */
-int slot_number(struct slot * slot)
+int sudoku_slot_number(struct sudoku_slot * slot)
 {
     return slot->number;
 }
@@ -82,7 +82,7 @@ int slot_number(struct slot * slot)
 /**
  * @return 1 if slot has candidate (1..9)
  */
-int slot_has_candidate(struct slot * slot, int candidate)
+int sudoku_slot_has_candidate(struct sudoku_slot * slot, int candidate)
 {
     return slot->has_candidate[candidate];
 }
@@ -90,7 +90,7 @@ int slot_has_candidate(struct slot * slot, int candidate)
 /**
  * @return number of candidates.  (0..9)
  */
-int slot_candidate_count(struct slot * slot)
+int sudoku_slot_candidate_count(struct sudoku_slot * slot)
 {
     return slot->candidate_count;
 }
