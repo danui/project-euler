@@ -12,20 +12,20 @@ void print_puzzle(int id, const char * label, struct sudoku * S)
         printf("Grid %d: %s\n", id, label);
     else
         printf("Grid %d\n", id);
-    for (i=1; i <= 9; ++i)
+    for (i=0; i < 9; ++i)
     {
-        for (j=1; j <= 9; ++j)
+        for (j=0; j < 9; ++j)
         {
             value = sudoku_get(S, i, j);
             if (value > 0)
                 printf(" %d", value);
             else
                 printf(" .");
-            if ((j%3)==0)
+            if ((j%3)==(3-1))
                 printf(" ");
         }
         printf("\n");
-        if ((i%3)==0)
+        if ((i%3)==(3-1))
             printf("\n");
     }
 }
@@ -47,7 +47,7 @@ void load_puzzle(int expected_id, FILE * fs, struct sudoku * S)
         printf("Expected id %d, got %d\n", expected_id, id);
         exit(EXIT_FAILURE);
     }
-    for (i=1; i <= 9; ++i)
+    for (i=0; i < 9; ++i)
     {
         fscanf(fs, "%s", line);
         if (strlen(line) != 9)
@@ -55,9 +55,9 @@ void load_puzzle(int expected_id, FILE * fs, struct sudoku * S)
             printf("strlen(%s) is %zu, should be 9\n", line, strlen(line));
             exit(EXIT_FAILURE);
         }
-        for (j=1; j <= 9; ++j)
+        for (j=0; j < 9; ++j)
         {
-            sudoku_put(S, i, j, (int)(line[j-1]-'0'));
+            sudoku_put(S, i, j, (int)(line[j]-'0'));
         }
     }
 }

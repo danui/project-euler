@@ -4,42 +4,12 @@
 
 #include "sudoku.h"
 
-struct slot;
-struct group;
+#include "slot.h"
 
-struct slot {
-    int id;
-    int number;
-    int * has_candidate;
-    int num_candidates;
-    struct group ** groups;
-};
-
-void slot_init(struct slot * slot, int id);
-void slot_put(struct slot * slot, int number);
-void slot_candidates(struct slot * slot, int * ret_candidates);
-
-
-
-struct sudoku {
-    int value_grid[9*9];
-    int candidate_grid[9*9*9];
-    int num_values;
-    //struct subproblem * subproblems;
-    int subproblem_grid[9*9*3];
-};
-
-
-
-void foreach_subproblem(struct sudoku * S, int i, int j,
-    void (*subproblem)(struct sudoku * S, int ib, int ic, int jb, int jc))
+struct sudoku
 {
-    subproblem(S, i, 1, 0, 9);
-    subproblem(S, 0, 9, j, 1);
-    subproblem(S, i/3*3, 3, j/3*3, 3);
-}
-
-
+    struct slot *slot[81];
+};
 
 struct sudoku * new_sudoku(void)
 {
@@ -58,27 +28,24 @@ void sudoku_free(struct sudoku * S)
 void sudoku_reset(struct sudoku * S)
 {
     int i, j, k;
-    memset(S, 0, sizeof(struct sudoku));
-    for (i=0; i<9; ++i)
-        for (j=0; j<9; ++j)
-            for (k=0; k<9; ++k)
-                S->candidate_grid[i*9*9 + j*9 + k] = 1;
+
+    for (i=0; i<81; ++i) {
+        if (S->slot[i])
+            slot_free(S->slot[i]);
+        S->slot[i] = new_slot(i);
+    }
 }
 
-void sudoku_put(struct sudoku * S, int I, int J, int value)
+void sudoku_put(struct sudoku * S, int row, int col, int number)
 {
-    int i = I-1;
-    int j = J-1;
-    int k = value - 1;
-    S->value_grid[i*9+j] = value;
-    S->num_values += 1;
+    int i = slot_id_from_rowcol(row, col);
+    slot_set_number(S->slot[i], number);
 }
 
-int sudoku_get(struct sudoku * S, int I, int J)
+int sudoku_get(struct sudoku * S, int row, int col)
 {
-    int i = I-1;
-    int j = J-1;
-    return S->value_grid[i*9 + j];
+    int i = slot_id_from_rowcol(row, col);
+    return slot_number(S->slot[i]);
 }
 
 void sudoku_solve(struct sudoku * S,
