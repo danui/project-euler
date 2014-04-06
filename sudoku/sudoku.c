@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "fmt.h"
 #include "sudoku.h"
 
 #include "sudoku_slot.h"
@@ -11,6 +12,7 @@ struct sudoku
 {
     struct sudoku_slot *slot[81];
     struct sudoku_group *group[27];
+    struct sudoku_slot_callbacks slot_callbacks[1];
 };
 
 static void link_group_slot(struct sudoku * S, int g, int s)
@@ -21,12 +23,27 @@ static void link_group_slot(struct sudoku * S, int g, int s)
     sudoku_slot_add_group(slot, group);
 }
 
+static void on_candidate_removed_from_slot(struct sudoku_slot * slot,
+    int number, void * user_data)
+{
+    /* TODO: Slots should be placed in a minimum priority queue and this
+     * should rebalance the queue so that the slots with the least
+     * candidates surface to the top.  For now, just print a message.
+     */
+    printf("Candidate %d removed from slot (%d,%d)\n", number,
+        sudoku_slot_row_from_id(sudoku_slot_id(slot)),
+        sudoku_slot_col_from_id(sudoku_slot_id(slot)));
+}
+
 struct sudoku * new_sudoku(void)
 {
     struct sudoku * S = calloc(1, sizeof(struct sudoku));
     int i, j, k;
+
+    S->slot_callbacks->user_data = (void*)S;
+    S->slot_callbacks->on_candidate_removed = on_candidate_removed_from_slot;
     for (i=0; i<81; ++i)
-        S->slot[i] = new_sudoku_slot(i);
+        S->slot[i] = new_sudoku_slot(i, S->slot_callbacks);
     for (i=0; i<27; ++i)
         S->group[i] = new_sudoku_group(i);
 

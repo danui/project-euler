@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "sudoku_slot.h"
+#include "sudoku_group.h"
 #include "fmt.h"
 
 struct sudoku_slot
@@ -10,15 +11,17 @@ struct sudoku_slot
     int number;
     int has_candidate[10];
     int candidate_count;
-    struct sudoku_group *group[3];
     int group_count;
+    struct sudoku_group *group[3];
+    struct sudoku_slot_callbacks * callbacks;
 };
 
-struct sudoku_slot * new_sudoku_slot(int id)
+struct sudoku_slot * new_sudoku_slot(int id, struct sudoku_slot_callbacks * callbacks)
 {
     struct sudoku_slot * slot = calloc(1, sizeof(struct sudoku_slot));
     int i, v;
     slot->id = id;
+    slot->callbacks = callbacks;
     slot->row = sudoku_slot_row_from_id(id);
     slot->col = sudoku_slot_col_from_id(id);
     slot->number = 0;
@@ -59,12 +62,14 @@ void sudoku_slot_add_group(struct sudoku_slot * slot, struct sudoku_group * grou
  */
 void sudoku_slot_set_number(struct sudoku_slot * slot, int number)
 {
-    int v;
+    int i, v;
     if (slot->number == 0) {
         slot->number = number;
         for (v = 1; v <= 9; ++v)
             slot->has_candidate[v] = 0;
         slot->candidate_count = 0;
+        for (i = 0; i < slot->group_count; ++i)
+            sudoku_group_on_slot_set_number(slot->group[i], slot);
     } else if (slot->number != number) {
         fprintf(stderr, __FMT__
             "attempt to reset slot %d (%d,%d) number %d to %d\n",
@@ -98,4 +103,15 @@ int sudoku_slot_has_candidate(struct sudoku_slot * slot, int candidate)
 int sudoku_slot_candidate_count(struct sudoku_slot * slot)
 {
     return slot->candidate_count;
+}
+
+void sudoku_slot_remove_candidate(struct sudoku_slot * slot, int number)
+{
+    if (slot->has_candidate[number]) {
+        slot->has_candidate[number] = 0;
+        slot->candidate_count -= 1;
+        if (slot->callbacks && slot->callbacks->on_candidate_removed)
+            slot->callbacks->on_candidate_removed(slot, number,
+                slot->callbacks->user_data);
+    }
 }

@@ -53,3 +53,12 @@ struct sudoku_slot * sudoku_group_slot(struct sudoku_group * group, int i)
 {
     return group->slot[i];
 }
+
+void sudoku_group_on_slot_set_number(struct sudoku_group * group,
+    struct sudoku_slot * slot)
+{
+    int number = sudoku_slot_number(slot);
+    int i;
+    for (i=0; i < group->slot_count; ++i)
+        sudoku_slot_remove_candidate(group->slot[i], number);
+}
