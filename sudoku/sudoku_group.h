@@ -30,4 +30,9 @@ struct sudoku_slot * sudoku_group_slot(struct sudoku_group * group, int i);
 void sudoku_group_on_slot_set_number(struct sudoku_group * group,
     struct sudoku_slot * slot);
 
+/**
+ * @return 1 if did something, 0 if did nothing.
+ */
+int sudoku_group_resolve(struct sudoku_group * group);
+
 #endif

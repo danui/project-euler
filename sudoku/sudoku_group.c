@@ -62,3 +62,28 @@ void sudoku_group_on_slot_set_number(struct sudoku_group * group,
     for (i=0; i < group->slot_count; ++i)
         sudoku_slot_remove_candidate(group->slot[i], number);
 }
+
+int sudoku_group_resolve(struct sudoku_group * group)
+{
+    int ret = 0;
+    int k, i, j, n;
+
+    for (k=1; k<=9; ++k) {
+        n = 0;
+        for (i=0; i<9; ++i) {
+            if (sudoku_slot_has_candidate(group->slot[i], k)) {
+                n += 1;
+                j = i;
+            }
+        }
+        if (n == 1) {
+            /* then k is present only at slot j. */
+            sudoku_slot_set_number(group->slot[j], k);
+            ret = 1;
+        }
+    }
+
+    /* TODO: This needs to be improved... */
+
+    return ret;
+}

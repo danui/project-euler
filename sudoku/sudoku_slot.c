@@ -63,11 +63,16 @@ void sudoku_slot_add_group(struct sudoku_slot * slot, struct sudoku_group * grou
 void sudoku_slot_set_number(struct sudoku_slot * slot, int number)
 {
     int i, v;
+    if (number == 0) {
+        return;
+    }
     if (slot->number == 0) {
         slot->number = number;
         for (v = 1; v <= 9; ++v)
             slot->has_candidate[v] = 0;
         slot->candidate_count = 0;
+        printf(__FMT__ "slot (%d,%d) <- %d\n", __OUT__,
+            slot->row, slot->col, number);
         for (i = 0; i < slot->group_count; ++i)
             sudoku_group_on_slot_set_number(slot->group[i], slot);
     } else if (slot->number != number) {
@@ -114,4 +119,22 @@ void sudoku_slot_remove_candidate(struct sudoku_slot * slot, int number)
             slot->callbacks->on_candidate_removed(slot, number,
                 slot->callbacks->user_data);
     }
+}
+
+int sudoku_slot_resolve(struct sudoku_slot * slot)
+{
+    int k;
+    if (slot->candidate_count == 0) {
+        return 1;
+    }
+    if (slot->candidate_count == 1) {
+        for (k=1; k <= 9; ++k)
+            if (slot->has_candidate[k]) {
+                printf(__FMT__ "last candidate %d, slot (%d,%d)\n",
+                    __OUT__, k, slot->row, slot->col);
+                sudoku_slot_set_number(slot, k);
+            }
+        return 1;
+    }
+    return 0;
 }

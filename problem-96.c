@@ -76,6 +76,8 @@ int main(void)
         S = new_sudoku();
         load_puzzle(id, fs, S);
         print_puzzle(id, "loaded", S);
+        sudoku_solve(S, NULL);
+        print_puzzle(id, "after solve", S);
         sudoku_free(S);
     }
     exit(EXIT_SUCCESS);

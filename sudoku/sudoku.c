@@ -114,5 +114,30 @@ int sudoku_get(struct sudoku * S, int row, int col)
 
 void sudoku_solve(struct sudoku * S, struct sudoku_callbacks * callbacks)
 {
-    /* TODO: implement? */
+    int i;
+    int n;
+    int last_n = 0;
+    for (;;) {
+        n = 0;
+        for (i=0; i<27; ++i) {
+            n += sudoku_group_resolve(S->group[i]);
+        }
+        if (n > 0)
+            continue;
+
+        n = 0;
+        for (i=0; i<81; ++i) {
+            n += sudoku_slot_resolve(S->slot[i]);
+        }
+        if (n == 81) {
+            printf("Sudoku completed\n");
+            return;
+        } else if (n == last_n) {
+            printf(__FMT__ "No progress made, n=%d\n", __OUT__, n);
+            return;
+        } else {
+            printf(__FMT__ "Progress made, %d -> %d\n", __OUT__, last_n, n);
+        }
+        last_n = n;
+    }
 }

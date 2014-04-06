@@ -63,4 +63,9 @@ int sudoku_slot_candidate_count(struct sudoku_slot * slot);
  */
 void sudoku_slot_remove_candidate(struct sudoku_slot * slot, int number);
 
+/**
+ * @return 1 if slot is resolved, 0 otherwise.
+ */
+int sudoku_slot_resolve(struct sudoku_slot * slot);
+
 #endif
