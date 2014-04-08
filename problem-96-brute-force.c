@@ -118,7 +118,6 @@ int main(void)
 {
     FILE * fs;
     int id;
-    char label[100];
     int sum;
 
     fs = fopen("sudoku.txt", "r");
