@@ -30,5 +30,7 @@ int main(void)
     int * x;
     x = solve(1, in);
     printf("x[0] = %d\n", x[0]);
+    free(x);
+    fclose(in);
     return 0;
 }
