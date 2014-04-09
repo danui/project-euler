@@ -37,6 +37,29 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+/**
+ * Test if set A satisfies conditions (i) and (ii) above.  The general
+ * idea is to try to break the conditions individually since the
+ * conditions apply to _any_ pair of non-empty disjoint subsets.
+ *
+ * Rule (i) is broken by trying to even out the sums.
+ *
+ * Rule (ii) is broken by giving the smallests numbers to B such that B
+ * has got more elements than C.
+ */
+int satisfies(int A, int n)
+{
+    int nB = 0;
+    int nC = 0;
+    int SB = 0;
+    int SC = 0;
+    int i;
+
+    /* TODO: ? */
+    return 0;
+}
+
 int main(void)
 {
     return 0;
