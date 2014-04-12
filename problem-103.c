@@ -59,16 +59,14 @@ int satisfies(int *A, int n)
     int i;
 
     /* Breaking (ii).  (note A must be sorted)  */
-    SB = 0;
-    SC = 0;
-    nB = n/2 + 1;
-    nC = n - nB;
-    if (nC > 0) {
-        for (i=0; i < nB; ++i)
-            SB += A[i];
-        for (i=nB; i < n; ++i)
-            SC += A[i];
-        if (SB <= SC)
+    SB = SC = 0;
+    nB = nC = 0;
+    while (nB+nC < n) {
+        if (nB == nC)
+            SB += A[nB++];
+        else
+            SC += A[n-(++nC)];
+        if (nB > nC && nC > 0 && SB <= SC)
             return 0;
     }
 
