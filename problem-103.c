@@ -39,28 +39,125 @@
 #include <stdlib.h>
 
 /**
- * Test if set A satisfies conditions (i) and (ii) above.  The general
- * idea is to try to break the conditions individually since the
- * conditions apply to _any_ pair of non-empty disjoint subsets.
+ * Test if set A satisfies properties (i) and (ii) above.  The general
+ * idea is to try to voilate the properties individually since the
+ * properties apply to _any_ pair of non-empty disjoint subsets.
  *
- * Rule (i) is broken by trying to even out the sums.
+ * Property (i) is broken by trying to even out the sums.
  *
- * Rule (ii) is broken by giving the smallests numbers to B such that B
- * has got more elements than C.
+ * Property (ii) is broken by giving the smallests numbers to B such
+ * that B has got more elements than C.
+ *
+ * @param A,n [in] A _sorted_ array of n integers.
+ *
+ * @return 1 if A satisfies the conditions required for both properties.
  */
-int satisfies(int A, int n)
+int satisfies(int *A, int n)
 {
-    int nB = 0;
-    int nC = 0;
-    int SB = 0;
-    int SC = 0;
+    int nB, SB;
+    int nC, SC;
     int i;
 
-    /* TODO: ? */
+    /* Breaking (ii).  (note A must be sorted)  */
+    SB = 0;
+    SC = 0;
+    nB = n/2 + 1;
+    nC = n - nB;
+    if (nC > 0) {
+        for (i=0; i < nB; ++i)
+            SB += A[i];
+        for (i=nB; i < n; ++i)
+            SC += A[i];
+        if (SB <= SC)
+            return 0;
+    }
+
+    /* Breaking (i). */
+
+    /* Firstly, no two elements may be equal otherwise two subsets, each
+     * consisting of one of those elements would be equal.
+     */
+    for (i=1; i < n; ++i)
+        if (A[i] == A[i-1])
+            return 0;
+
+    /* NOTES:
+     *
+     *   o If no two elements are equal, then the minimum gap between
+     *     consecutive elements in A is 1.
+     *
+     *    o The lower bound on S(A) is
+     *
+     *          A[0] * n + (n-1)*(n)/2
+     */
+
+    /* TODO:... */
+
+    return 1;
+}
+
+int test_satisfies(void)
+{
+    int A[10];
+    int n;
+
+    n = 0;
+    A[n++] = 1;
+    if (!satisfies(A, n)) return -1;
+
+    n = 0;
+    A[n++] = 1;
+    A[n++] = 2;
+    if (!satisfies(A, n)) return -1;
+
+    n = 0;
+    A[n++] = 2;
+    A[n++] = 3;
+    A[n++] = 4;
+    if (!satisfies(A, n)) return -1;
+
+    n = 0;
+    A[n++] = 3;
+    A[n++] = 5;
+    A[n++] = 6;
+    A[n++] = 7;
+    if (!satisfies(A, n)) return -1;
+
+    n = 0;
+    A[n++] = 6;
+    A[n++] = 9;
+    A[n++] = 11;
+    A[n++] = 12;
+    A[n++] = 13;
+    if (!satisfies(A, n)) return -1;
+
+    /* negative test */
+    n = 0;
+    A[n++] = 6;
+    A[n++] = 9;
+    A[n++] = 11;
+    A[n++] = 12;
+    A[n++] = 130;               /* nB > nC but SB < SC */
+    if (satisfies(A, n)) return -1;
+
+    /* negative test */
+    n = 0;
+    A[n++] = 6;
+    A[n++] = 9;
+    A[n++] = 11;                /* {11} vs {11} */
+    A[n++] = 11;
+    A[n++] = 13;
+    if (satisfies(A, n)) return -1;
+
     return 0;
 }
 
 int main(void)
 {
+    if (0 != test_satisfies()) {
+        printf("satisfies not working\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("okay\n");
     return 0;
 }
