@@ -14,6 +14,7 @@ sudoku_objs = [
 env.Program('out/problem-31', 'problem-31.c')
 env.Program('out/problem-48', 'problem-48.c')
 env.Program('out/problem-50', ['problem-50.c', util_o])
+env.Program('out/problem-23', 'problem-23.c')
 env.Program('out/problem-25', 'problem-25.c')
 env.Program('out/problem-43', 'problem-43.c')
 env.Program('out/test_is_prime', ['test_is_prime.c', util_o])
