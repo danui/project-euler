@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "itshould.h"
 
-typedef uint64_t number_t;
+typedef long long unsigned number_t;
 
 /**
  * @return 1 if divisor is a proper divisor of subject.
@@ -53,8 +53,8 @@ static number_t sum_of_proper_divisors(number_t x) {
         j = x / i;
         if (j*i == x) {
             sum += i + j;
-            upper = j;
         }
+        upper = j;
     }
     return sum;
 }
@@ -106,49 +106,74 @@ static void test(void) {
     } while (0));
 }
 
-/**
- * @param x   Can x be written as sum of two abundant numbers
- * @param L   Array of abundant numbers.
- * @param n   Number of abundant numbers in L.
- */
-static int can_be_written(number_t x, number_t * L, number_t n) {
-    number_t i, j;
-    for (i = 0; L[i] < x; ++i) {
-        for (j=i; L[j] < x; ++j) {
-            if (L[i] + L[j] == x) {
-                //printf("%u + %u -> %u\n", L[i], L[j], x);
-                return 1;
+int main(int argc, char ** argv) {
+    test();
+
+    // Our goal is to find the sum of all positive integers that _CANNOT_ be
+    // written as the sum of two abundant numbers.
+
+    // We are told that all integers greater than 28123 _CAN_ be written as the
+    // sum of two abundant numbers. Thus our search space, for numbers that
+    // _CANNOT_ be written as the sum of two abundant numbers is integers 1 to
+    // 28123.
+
+    // The strategy is to first obtain a list of abundant numbers (A). We only
+    // need to search numbers from 12 to 28123-12, because 1) 12 is the smallest
+    // abundant number (we are told), and 2) another abundant number larger than
+    // 28123-12 would sum with 12 to get a number larger than 28123, and those
+    // are numbers outside our search space.
+
+    unsigned long long * A;
+    unsigned long long n;
+    unsigned long long i;
+
+    A = calloc(28124, sizeof(unsigned long long));
+    n = 0;
+    for (i = 0; i < 28124; ++i) {
+        if (ABUNDANT == get_number_type(i)) {
+            A[n++] = i;
+        }
+    }
+    printf("There are %llu abundant numbers\n", n);
+
+    // Next we create list of booleans long enough for all our candidate
+    // numbers. Initialise all booleans to false. Call this list B.
+
+    unsigned char * B;
+    B = calloc(28124, sizeof(unsigned char));
+
+    // Then for each combination (i,j) of values A[i] and A[j], we compute their
+    // sum and mark B[A[i]+A[j]] as true, if their sums are within the range.
+
+    unsigned long long j, k;
+    unsigned long long m = 0;
+    for (i=0; i<n; ++i) {
+        for (j=i; j<n; ++j) {
+            //printf("i=%llu j=%llu A[i]=%llu A[j]=%llu\n",i,j,A[i],A[j]);
+            k = A[i] + A[j];
+            if (k < 28124) {
+                if (!B[k]) {
+                    B[k] = (unsigned char)0x01;
+                    m += 1;
+                    //printf("i=%llu m=%llu\n", i, m);
+                    //printf("%llu: %llu is the sum of %llu and %llu\n", m, k, A[i], A[j]);
+                }
             }
         }
     }
-    return 0;
-}
+    printf("Eliminated %llu numbers\n", m);
 
-int main(int argc, char ** argv) {
-    test();
-    number_t limit = 28124;
-    number_t i, n;
-    number_t * abnos;
+    // Next we scan through B. For every false we find, the index to that false
+    // is a number that cannot be written as the sum of two abundant numbers.
 
-    if (NULL == (abnos = malloc(sizeof(*abnos) * limit))) {
-        perror("malloc failed");
-    }
-    n = 0;
-    for (i = 0; i < limit; ++i) {
-        if (ABUNDANT == get_number_type(i)) {
-            abnos[n] = i;
-            n += 1;
-        }
-    }
-    number_t sum = 0;
-    for (i = 0; i < limit; ++i) {
-        if (!can_be_written(i, abnos, n)) {
-            printf("Number %llu cannot be written as sum of two abundant numbers\n", (unsigned long long)i);
+    unsigned long long sum = 0;
+    for (i = 0; i < 28124; ++i) {
+        if (!B[i]) {
             sum += i;
+            //printf("i = %llu  sum=%llu\n", i, sum);
         }
     }
-    printf("%llu\n", (unsigned long long)sum);
-
+    printf("sum is %llu\n", sum);
 
     return 0;
 }
