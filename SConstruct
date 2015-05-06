@@ -11,6 +11,7 @@ sudoku_objs = [
 	sudoku_env.Object('sudoku/sudoku_group.c'),
 ];
 
+env.Program('out/problem-8', 'problem-8.c')
 env.Program('out/problem-31', 'problem-31.c')
 env.Program('out/problem-48', 'problem-48.c')
 env.Program('out/problem-50', ['problem-50.c', util_o])

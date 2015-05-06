@@ -1,3 +1,8 @@
+print """
+NOT SURE What Happened... but this is no longer the question.
+"""
+
+
 """
 Find the greatest product of five consecutive digits in the 1000-digit
 number.
@@ -81,5 +86,5 @@ def greatest_consecutive_product(A,c):
         b += 1
     return greatest, offset
 
-print greatest_consecutive_product(A, 5)
+print "greatest is %s (at offset %s)"%greatest_consecutive_product(A, 5)
 
