@@ -28,6 +28,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "itshould.h"
+#include "walltime.h"
 
 /**
  * @return 1 if divisor is a proper divisor of subject.
@@ -207,7 +208,11 @@ static void solve(void) {
 }
 
 int main(int argc, char ** argv) {
-    test();
+    //test();
+    unsigned long long t0, t1;
+    t0 = walltime_ms();
     solve();
+    t1 = walltime_ms();
+    printf("milliseconds: %llu\n", t1-t0);
     return 0;
 }
