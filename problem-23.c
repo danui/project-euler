@@ -131,7 +131,7 @@ static void test(void) {
     } while (0));
 }
 
-static void solve(void) {
+static unsigned long long solve(void) {
     // Our goal is to find the sum of all positive integers that _CANNOT_ be
     // written as the sum of two abundant numbers.
 
@@ -158,7 +158,7 @@ static void solve(void) {
             A[n++] = i;
         }
     }
-    printf("There are %llu abundant numbers\n", n);
+    //printf("There are %llu abundant numbers\n", n);
 
     // Next we create list of booleans long enough for all our candidate
     // numbers. Initialise all booleans to false. Call this list B.
@@ -191,7 +191,7 @@ static void solve(void) {
             }
         }
     }
-    printf("Eliminated %llu numbers\n", m);
+    //printf("Eliminated %llu numbers\n", m);
 
     // At this point, the index numbers of the false values remaining in B are
     // numbers that cannot be written as the sum of two abundant numbers.
@@ -204,15 +204,17 @@ static void solve(void) {
             //printf("i = %llu  sum=%llu\n", i, sum);
         }
     }
-    printf("sum is %llu\n", sum);
+    //printf("sum is %llu\n", sum);
+    return sum;
 }
 
 int main(int argc, char ** argv) {
     //test();
-    unsigned long long t0, t1;
+    unsigned long long t0, t1, sum;
     t0 = walltime_ms();
-    solve();
+    sum = solve();
     t1 = walltime_ms();
-    printf("milliseconds: %llu\n", t1-t0);
+    printf("time taken is %llu ms\n", t1-t0);
+    printf("sum is %llu\n", sum);
     return 0;
 }

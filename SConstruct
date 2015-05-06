@@ -4,7 +4,7 @@ util_o = env.Object('util.c')
 words_o = env.Object('words.c');
 
 sudoku_env = Environment()
-sudoku_env['CFLAGS'] = ['-Isudoku', '-I.']
+sudoku_env['CFLAGS'] = ['-Isudoku', '-I.', '-O3']
 sudoku_objs = [
 	sudoku_env.Object('sudoku/sudoku.c'),
 	sudoku_env.Object('sudoku/sudoku_slot.c'),
