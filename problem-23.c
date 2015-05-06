@@ -29,33 +29,45 @@
 #include <stdio.h>
 #include "itshould.h"
 
-typedef long long unsigned number_t;
-
 /**
  * @return 1 if divisor is a proper divisor of subject.
  */
-static int is_proper_divisor(number_t subject, number_t divisor) {
+static int is_proper_divisor(
+    unsigned long long subject,
+    unsigned long long divisor)
+{
     return (subject % divisor) == 0 ? 1:0;
 }
 
-static number_t sum_of_proper_divisors(number_t x) {
-    number_t i;
-    number_t j;
-    number_t sum;
-    number_t upper;
+static unsigned long long sum_of_proper_divisors(unsigned long long x) {
+    unsigned long long i;
+    unsigned long long j;
+    unsigned long long sum;
+    unsigned long long upper;
 
     /* zero is not a perfect number */
     if (x == 0) return 0;
 
-    upper = x / 2;
+    upper = x;
+    // printf("\n%llu: [1", x);
     sum = 1;
     for (i = 2; i < upper; ++i) {
+        // printf("(i=%llu)" ,i);
         j = x / i;
         if (j*i == x) {
-            sum += i + j;
+            if (i == j) {
+                sum += i;
+                // printf(",%llu", i);
+            } else {
+                sum += i + j;
+                // printf(",%llu", i);
+                // printf(",%llu", j);
+            }
+            upper = (i+j) >> 1;
         }
-        upper = j;
+        // printf("(upper=%llu)", upper);
     }
+    // printf("]\n");
     return sum;
 }
 
@@ -75,8 +87,8 @@ static const char * str_number_type(enum number_type type) {
     exit(EXIT_FAILURE);
 }
 
-static enum number_type get_number_type(number_t x) {
-    number_t s = sum_of_proper_divisors(x);
+static enum number_type get_number_type(unsigned long long x) {
+    unsigned long long s = sum_of_proper_divisors(x);
     if (s < x) return DEFICIENT;
     if (s > x) return ABUNDANT;
     return PERFECT;
@@ -85,7 +97,7 @@ static enum number_type get_number_type(number_t x) {
 /**
  * @return 1 if x is a perfect number
  */
-static int is_perfect_number(number_t x) {
+static int is_perfect_number(unsigned long long x) {
     return PERFECT == get_number_type(x) ? 1 : 0;
 }
 
@@ -94,11 +106,23 @@ static void test(void) {
         It("should return 1 when x is 28", Assert(is_perfect_number(28)));
         It("should return 0 when x is 12", Assert(!is_perfect_number(12)));
     } while (0));
+    Describe("sum_of_proper_divisors(x)", do {
+        It("should return 28 when x is 28",
+            Assert(28 == sum_of_proper_divisors(28)));
+        It("should return 16 when x is 12",
+            Assert(16 == sum_of_proper_divisors(12)));
+        It("should return 3 when x is 4",
+            Assert(3 == sum_of_proper_divisors(4)));
+        // 16
+        //1, 2, 4, 8 = 15
+        It("should return 15 when x is 16",
+            Assert(15 == sum_of_proper_divisors(16)));
+    } while (0));
     Describe("get_number_type(x)", do {
         It("should return ABUNDANT when x is 12",
             Assert(ABUNDANT == get_number_type(12)));
         It("should not be ABUNDANT when x < 12", do {
-            number_t i;
+            unsigned long long i;
             for (i = 0; i < 12; ++i) {
                 Assert(ABUNDANT != get_number_type(i));
             }
@@ -106,9 +130,7 @@ static void test(void) {
     } while (0));
 }
 
-int main(int argc, char ** argv) {
-    test();
-
+static void solve(void) {
     // Our goal is to find the sum of all positive integers that _CANNOT_ be
     // written as the sum of two abundant numbers.
 
@@ -118,18 +140,19 @@ int main(int argc, char ** argv) {
     // 28123.
 
     // The strategy is to first obtain a list of abundant numbers (A). We only
-    // need to search numbers from 12 to 28123-12, because 1) 12 is the smallest
-    // abundant number (we are told), and 2) another abundant number larger than
-    // 28123-12 would sum with 12 to get a number larger than 28123, and those
-    // are numbers outside our search space.
+    // need to be concerned with abundant numbers up to 28123 because any
+    // abundant number greate than that would lead to a sum greater than 28123,
+    // which is outside our search space.
+
+    // We do not know how many abundant numbers there are, so we just provision
+    // enough for 28123.
 
     unsigned long long * A;
     unsigned long long n;
     unsigned long long i;
-
-    A = calloc(28124, sizeof(unsigned long long));
+    A = calloc(28123, sizeof(unsigned long long));
     n = 0;
-    for (i = 0; i < 28124; ++i) {
+    for (i = 1; i <= 28123; ++i) {
         if (ABUNDANT == get_number_type(i)) {
             A[n++] = i;
         }
@@ -139,11 +162,17 @@ int main(int argc, char ** argv) {
     // Next we create list of booleans long enough for all our candidate
     // numbers. Initialise all booleans to false. Call this list B.
 
+    // Notes:
+    //
+    // - Allocate 28124 because you need slot B[28123].
+    // - Use calloc so everything is false.
+
     unsigned char * B;
     B = calloc(28124, sizeof(unsigned char));
 
-    // Then for each combination (i,j) of values A[i] and A[j], we compute their
-    // sum and mark B[A[i]+A[j]] as true, if their sums are within the range.
+    // Then for each possible pair of values from A, we compute their sum as k.
+    // k is therefore a number that is a sum of two abundant numbers. If k is in
+    // the range 0 <= k < 29124, then mark B[k] as true.
 
     unsigned long long j, k;
     unsigned long long m = 0;
@@ -163,8 +192,9 @@ int main(int argc, char ** argv) {
     }
     printf("Eliminated %llu numbers\n", m);
 
-    // Next we scan through B. For every false we find, the index to that false
-    // is a number that cannot be written as the sum of two abundant numbers.
+    // At this point, the index numbers of the false values remaining in B are
+    // numbers that cannot be written as the sum of two abundant numbers.
+    // Iterate through B and sum up the indices i where B[i] is false.
 
     unsigned long long sum = 0;
     for (i = 0; i < 28124; ++i) {
@@ -174,6 +204,10 @@ int main(int argc, char ** argv) {
         }
     }
     printf("sum is %llu\n", sum);
+}
 
+int main(int argc, char ** argv) {
+    test();
+    solve();
     return 0;
 }
