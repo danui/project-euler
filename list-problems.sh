@@ -1,7 +1,16 @@
-for ((i=1; i<1000; ++i)); do
-    for suffix in py c; do
-	if [[ -f problem-$i.$suffix ]]; then
-	    echo problem-$i.$suffix;
-	fi
+#!/bin/bash
+
+function getProblemIds {
+    ls problem-* | cut -d . -f1 | cut -d- -f2 | sort -n | uniq
+}
+
+function listProblems {
+    for i in $(getProblemIds); do
+	for j in c py scala java; do
+	    find . -name "problem-$i.$j"
+	    find . -name "problem-$i-*.$j"
+	done
     done
-done
+}
+
+listProblems
