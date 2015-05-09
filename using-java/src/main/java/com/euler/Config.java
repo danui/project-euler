@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Config {
 
@@ -13,10 +14,17 @@ public class Config {
 
     private static final Map<String,ProblemLoader> LOADERS = new HashMap<>();
     {
+        // TODO This is a pain to maintain. Can we use ClassLoader magic?
         LOADERS.put("24", new ProblemLoader() {
             @Override
             public Problem load() {
                 return new Problem24();
+            }
+        });
+        LOADERS.put("27", new ProblemLoader() {
+            @Override
+            public Problem load() {
+                return new Problem27();
             }
         });
     }
@@ -37,10 +45,11 @@ public class Config {
         this.args = args;
     }
 
-    public List<Problem> getProblems() {
-        List<Problem> result = new ArrayList<>();
+    public Map<String,Problem> getProblems() {
+        Map<String,Problem> result = new TreeMap<>();
         for (int i = 0; i < args.length; ++i) {
-            result.add(loadProblem(args[i]));
+            String key = args[i];
+            result.put(key, loadProblem(key));
         }
         return result;
     }

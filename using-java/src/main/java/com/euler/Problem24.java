@@ -23,17 +23,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class Problem24 implements Problem, Callable<String> {
-
-    @Override
-    public String getName() {
-        return "24";
-    }
-
-    @Override
-    public Callable<String> getTask() {
-        return this;
-    }
+public class Problem24 implements Problem {
 
     @Override
     public String call() {
