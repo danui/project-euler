@@ -1,5 +1,7 @@
 package euler;
 
+// Solution posted on page 8.
+
 /**
 
 Lexicographic permutations
@@ -19,12 +21,15 @@ What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5,
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Problem24 {
 
     public static void main(String[] args) {
+        long t0 = System.currentTimeMillis();
         solve();
+        long t1 = System.currentTimeMillis();
+        long elapsed = t1 - t0;
+        System.out.println("elapsed msec: " + elapsed);
     }
 
     /**
@@ -66,9 +71,9 @@ public class Problem24 {
             int f = factorial(k-1);
             int gap = targetSeen - numSeen;
             int i = gap / f;
-            System.out.println(String.format(
-                "k: %d, f: %d, gap: %d, i: %d, numSeen: %d",
-                k, f, gap, i, numSeen));
+            // System.out.println(String.format(
+            //     "k: %d, f: %d, gap: %d, i: %d, numSeen: %d",
+            //     k, f, gap, i, numSeen));
             solution.add(digits.remove(i));
             numSeen += i * f;
         }
@@ -81,6 +86,7 @@ public class Problem24 {
     }
 
     private static int factorial(int n) {
+        // Note: factorial 0 is 1.
         if (n < 0) {
             throw new IllegalArgumentException("Bad arg, n is " + n);
         }
