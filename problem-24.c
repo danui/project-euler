@@ -91,7 +91,7 @@ void solver(void) {
     }
     printf("ans: ");
     for (i=0; i<10; ++i)
-        printf("%llu", digits[i]);
+        printf("%d", digits[i]);
     printf("\n");
 }
 
