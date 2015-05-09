@@ -68,7 +68,7 @@ void solver(void) {
     };
     llu i, k, nskip, target;
     llu remaining = 10; // in set
-    target = 1000000;
+    target = 1000000-1;
     k = 0;
     while (remaining > 0) {
         fact = factorial(remaining - 1);
@@ -83,7 +83,7 @@ void solver(void) {
                     digits[k++] = i;
                     in_set[i] = 0;
                     remaining -= 1;
-                    printf("digit %llu\n", i);
+                    //printf("digit %llu\n", i);
                     break;
                 }
             }
