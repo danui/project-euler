@@ -16,6 +16,7 @@ What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5,
 */
 
 #include <stdio.h>
+#include "walltime.h"
 
 typedef unsigned long long llu;
 
@@ -73,7 +74,6 @@ void solver(void) {
     while (remaining > 0) {
         fact = factorial(remaining - 1);
         nskip = target / fact;
-        printf("target: %llu, remaining: %llu, fact: %llu, nskip: %llu\n", target, remaining, fact, nskip);
         target -= nskip * fact;
         for (i = 0; i < 10; ++i) {
             if (in_set[i]) {
@@ -83,7 +83,6 @@ void solver(void) {
                     digits[k++] = i;
                     in_set[i] = 0;
                     remaining -= 1;
-                    //printf("digit %llu\n", i);
                     break;
                 }
             }
@@ -96,7 +95,9 @@ void solver(void) {
 }
 
 int main(void) {
-    reasoning();
+    unsigned long long t0 = walltime_us();
     solver();
+    unsigned long long t1 = walltime_us();
+    printf("usec: %llu\n", t1-t0);
     return 0;
 }
