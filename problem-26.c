@@ -78,6 +78,7 @@ int main(void)
             printf("1/%d => %zu\n", d, len);
     }
     printf("1/%d => %zu\n", d_at_max, max_len);
+    printf("ans: %d\n", d_at_max);
     exit(EXIT_SUCCESS);
 }
 
