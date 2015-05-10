@@ -81,6 +81,7 @@ int main(void)
                 "6x: %d\n"
                 , x, x*2, x*3, x*4, x*5, x*6
             );
+            printf("ans: %d\n", x);
             return 0;
         }
     }
