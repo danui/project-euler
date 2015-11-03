@@ -1,0 +1,31 @@
+env = Environment()
+
+util_o = env.Object('src/util.c')
+words_o = env.Object('src/words.c');
+
+sudoku_env = Environment()
+sudoku_env['CFLAGS'] = ['-Isrc/sudoku', '-Isrc', '-O3']
+sudoku_objs = [
+	sudoku_env.Object('src/sudoku/sudoku.c'),
+	sudoku_env.Object('src/sudoku/sudoku_slot.c'),
+	sudoku_env.Object('src/sudoku/sudoku_group.c'),
+];
+
+env.Program('out/problem-8', 'src/problem-8.c')
+env.Program('out/problem-31', 'src/problem-31.c')
+env.Program('out/problem-48', 'src/problem-48.c')
+env.Program('out/problem-50', ['src/problem-50.c', util_o])
+env.Program('out/problem-23', 'src/problem-23.c')
+env.Program('out/problem-25', 'src/problem-25.c')
+env.Program('out/problem-43', 'src/problem-43.c')
+env.Program('out/test_is_prime', ['src/test_is_prime.c', util_o])
+env.Program('out/random_prime', ['src/random_prime.c', util_o])
+env.Program('out/problem-26', ['src/problem-26.c', util_o])
+env.Program('out/problem-52', ['src/problem-52.c', util_o])
+env.Program('out/problem-59', ['src/problem-59.c', words_o])
+env.Program('out/problem-96', ['src/problem-96.c'] + sudoku_objs)
+env.Program('out/problem-96-brute-force', ['src/problem-96-brute-force.c'])
+env.Program('out/problem-67', ['src/problem-67.c'])
+env.Program('out/problem-97', ['src/problem-97.c'])
+env.Program('out/problem-103', ['src/problem-103.c'])
+env.Program('out/problem-24', ['src/problem-24.c'])
