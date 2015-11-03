@@ -2,7 +2,7 @@ package com.euler;
 
 // Solution posted on page 8.
 
-/**
+/*
 
 Lexicographic permutations
 Problem 24
