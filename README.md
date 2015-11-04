@@ -40,6 +40,4 @@ names to execute.  Problem 24, for example, would be executed as
 follows.
 
     $ java -jar target/euler.jar 24
-    ans: 2783915460
-    elapsed msec: 1
-    Answer for Problem 24 is 2783915460
+    Problem 24 completed in 0 milliseconds. Answer is 2783915460

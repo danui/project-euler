@@ -14,10 +14,12 @@ public class Main {
         for (Map.Entry<String,Problem> i : problems.entrySet()) {
             String name = i.getKey();
             Problem problem = i.getValue();
+            long t0 = System.currentTimeMillis();
             String result = problem.call();
-            System.out.format("Answer for Problem %s is %s%n", name, result);
-            // TODO Add timing calls here. Remove them from Problem24. And
-            // update the README.md example.
+            long t1 = System.currentTimeMillis();
+            System.out.format(
+                "Problem %s completed in %d milliseconds. Answer is %s%n",
+                name, t1-t0, result);
         }
     }
 

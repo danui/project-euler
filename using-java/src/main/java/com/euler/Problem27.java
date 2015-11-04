@@ -71,10 +71,10 @@ public class Problem27 implements Problem {
                     best.getNumConsecutive() < curr.getNumConsecutive()) {
 
                     best = curr;
-                    System.out.format("New BEST is a=%d, b=%d consec=%d%n",
-                        best.getA(),
-                        best.getB(),
-                        best.getNumConsecutive());
+                    // System.out.format("New BEST is a=%d, b=%d consec=%d%n",
+                    //     best.getA(),
+                    //     best.getB(),
+                    //     best.getNumConsecutive());
                 }
             }
         }

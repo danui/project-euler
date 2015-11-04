@@ -27,19 +27,6 @@ public class Problem24 implements Problem {
 
     @Override
     public String call() {
-        long t0 = System.currentTimeMillis();
-        String result = solve();
-        long t1 = System.currentTimeMillis();
-        long elapsed = t1 - t0;
-        System.out.println("elapsed msec: " + elapsed);
-        return result;
-    }
-
-    /**
-     * Solver
-     */
-    private String solve() {
-
         // Observation.
         //
         // Given a set of k digits, the first factorial(k-1) permutations will
@@ -85,7 +72,7 @@ public class Problem24 implements Problem {
         for (Integer i : solution) {
             sb.append(i);
         }
-        System.out.println("ans: " + sb.toString());
+        //System.out.println("ans: " + sb.toString());
         return sb.toString();
     }
 
