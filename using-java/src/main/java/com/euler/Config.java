@@ -33,6 +33,12 @@ public class Config {
                 return new Problem28();
             }
         });
+        LOADERS.put("29", new ProblemLoader() {
+            @Override
+            public Problem load() {
+                return new Problem29();
+            }
+        });
     }
 
     private static Problem loadProblem(String key) {
