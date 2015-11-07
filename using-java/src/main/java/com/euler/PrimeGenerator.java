@@ -14,12 +14,21 @@ import java.util.*;
  */
 public class PrimeGenerator implements Iterable<Long> {
 
+    private final long maxSieveLimit;
     private final ArrayList<Long> primes = new ArrayList<>();
     private final Set<Long> sieve = new HashSet<>();
     private long sieveLimit = 2;
     private long nextOddNumber = 3;
 
     public PrimeGenerator() {
+        this(Long.MAX_VALUE);
+    }
+
+    /**
+     * @param upto Extend sieve only up to this value.
+     */
+    public PrimeGenerator(long upto) {
+        maxSieveLimit = upto;
         primes.add(Long.valueOf(2L));
     }
 
@@ -30,15 +39,21 @@ public class PrimeGenerator implements Iterable<Long> {
 
     private class IteratorImpl implements Iterator<Long> {
         private int idx = 0;
+        private Long nextPrime = null;
         @Override
         public boolean hasNext() {
-
-            // There's always a next prime number
-            return true;
+            nextPrime = getPrime(idx);
+            return nextPrime != null;
         }
         @Override
         public Long next() {
-            Long result = getPrime(idx);
+            Long result;
+            if (nextPrime == null) {
+                result = getPrime(idx);
+            } else {
+                result = nextPrime;
+                nextPrime = null;
+            }
             idx += 1;
             return result;
         }
@@ -52,9 +67,14 @@ public class PrimeGenerator implements Iterable<Long> {
     /**
      * The normal way to use this is through the iterator. This is intended for
      * testing, but could also be useful.
+     *
+     * @return Prime at idx, or null if that is not possible
      */
     public Long getPrime(int idx) {
         while (idx >= primes.size()) {
+            if (!canExtendSieve()) {
+                return null;
+            }
             extendSieve();
         }
         return primes.get(idx);
@@ -68,8 +88,18 @@ public class PrimeGenerator implements Iterable<Long> {
         return primes.size();
     }
 
+    private boolean canExtendSieve() {
+        return sieveLimit < maxSieveLimit;
+    }
+
     private void extendSieve() {
-        long extendedLimit = sieveLimit * 2;
+        long extendedLimit;
+        long maxExtend = maxSieveLimit - sieveLimit;
+        if (maxExtend > sieveLimit) {
+            extendedLimit = sieveLimit * 2;
+        } else {
+            extendedLimit = maxSieveLimit;
+        }
         for (Long prime : primes) {
             if (prime == 2L) {
                 continue;
