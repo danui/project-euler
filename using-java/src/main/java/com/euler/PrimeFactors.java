@@ -46,6 +46,10 @@ public class PrimeFactors {
         return new PrimeFactors(map);
     }
 
+    public static PrimeFactors valueOf(long number) {
+        return factorize(number);
+    }
+
     public static PrimeFactors init(Map<Long,Long> map) {
         // Assumes that map keys are prime numbers.
         return new PrimeFactors(copyMap(map));

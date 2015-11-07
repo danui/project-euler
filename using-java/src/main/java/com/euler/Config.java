@@ -39,6 +39,12 @@ public class Config {
                 return new Problem29();
             }
         });
+        LOADERS.put("29a", new ProblemLoader() {
+            @Override
+            public Problem load() {
+                return new Problem29a();
+            }
+        });
     }
 
     private static Problem loadProblem(String key) {

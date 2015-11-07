@@ -22,8 +22,7 @@ import java.math.*;
 import java.util.*;
 import static org.junit.Assert.*;
 
-// See also Problem29a which solves without using BigInteger.
-public class Problem29 implements Problem {
+public class Problem29a implements Problem {
 
     @Override
     public String call() {
@@ -32,11 +31,12 @@ public class Problem29 implements Problem {
     }
 
     private int getNumDistinctTerms(long maxA, long maxB) {
-        Set<BigInteger> terms = new HashSet<>();
+        Set<PrimeFactors> terms = new HashSet<>();
         for (long a = 2; a <= maxA; ++a) {
-            BigInteger term = BigInteger.valueOf(a);
+            PrimeFactors factors = PrimeFactors.valueOf(a);
+            PrimeFactors term = factors;
             for (long b = 2; b <= maxB; ++b) {
-                term = term.multiply(BigInteger.valueOf(a));
+                term = term.multiply(factors);
                 terms.add(term);
                 // System.out.format("DEBUG a=%d b=%d term=%s%n",
                 //     a, b, term.toString());
