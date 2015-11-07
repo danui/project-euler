@@ -18,7 +18,7 @@ public class PrimeGenerator implements Iterable<Long> {
     private final ArrayList<Long> primes = new ArrayList<>();
     private final Set<Long> sieve = new HashSet<>();
     private long sieveLimit = 2;
-    private long nextOddNumber = 3;
+    private long candidate = 3;
 
     public PrimeGenerator() {
         this(Long.MAX_VALUE);
@@ -112,9 +112,7 @@ public class PrimeGenerator implements Iterable<Long> {
             }
         }
         sieveLimit = extendedLimit;
-        for (Long candidate = nextOddNumber; candidate <= sieveLimit;
-            candidate += 2) {
-
+        for (; candidate <= sieveLimit; candidate += 2) {
             if (sieve.contains(candidate)) {
                 continue;
             }
