@@ -51,10 +51,11 @@ public class PrimeFactors {
         return new PrimeFactors(copyMap(map));
     }
 
-    private final TreeMap<Long,Long> map;
+    private final SortedMap<Long,Long> map;
+    private String stringNotation = null;
 
     private PrimeFactors(TreeMap<Long,Long> map) {
-        this.map = map;
+        this.map = Collections.unmodifiableSortedMap(map);
     }
 
     public long getNumber() {
@@ -103,7 +104,7 @@ public class PrimeFactors {
      * @return Map
      */
     public Map<Long,Long> getMap() {
-        return Collections.unmodifiableSortedMap(map);
+        return map;
     }
 
     /**
@@ -115,16 +116,32 @@ public class PrimeFactors {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("1");
-        for (Map.Entry<Long,Long> entry : map.entrySet()) {
-            sb.append("*(")
-                .append(entry.getKey())
-                .append("^")
-                .append(entry.getValue())
-                .append(")");
+        if (stringNotation == null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("1");
+            for (Map.Entry<Long,Long> entry : map.entrySet()) {
+                sb.append("*(")
+                    .append(entry.getKey())
+                    .append("^")
+                    .append(entry.getValue())
+                    .append(")");
+            }
+            stringNotation = sb.toString();
         }
-        return sb.toString();
+        return stringNotation;
+    }
+
+    @Override
+    public boolean equals(Object otherObject) {
+        if (otherObject == null) return false;
+        if (!(otherObject instanceof PrimeFactors)) return false;
+        PrimeFactors other = (PrimeFactors)otherObject;
+        return equalMaps(map, other.getMap());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     /**
@@ -163,5 +180,15 @@ public class PrimeFactors {
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
+    }
+
+    private static boolean equalMaps(Map<Long,Long> x, Map<Long,Long> y) {
+        for (Map.Entry<Long,Long> entry : x.entrySet()) {
+            if (!entry.getValue().equals(y.get(entry.getKey()))) return false;
+        }
+        for (Map.Entry<Long,Long> entry : y.entrySet()) {
+            if (!entry.getValue().equals(x.get(entry.getKey()))) return false;
+        }
+        return true;
     }
 }

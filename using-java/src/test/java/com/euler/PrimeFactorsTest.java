@@ -105,4 +105,13 @@ public class PrimeFactorsTest {
         }
         // System.out.println("DEBUG factors: " + factors);
     }
+
+    @Test
+    public void testEquals() {
+        PrimeFactors factorsX = PrimeFactors.factorize(5696L);
+        PrimeFactors factorsY = factorsX.pow(1L);
+        assertFalse(factorsX == factorsY);
+        assertTrue(factorsX.equals(factorsY));
+        assertEquals(factorsX.hashCode(), factorsY.hashCode());
+    }
 }
