@@ -71,7 +71,8 @@ public class Problem32 implements Problem {
                     Long val = filter(ary, a, b, c);
                     if (val > 0 && !bag.contains(val)) {
                         sum += val;
-                        System.out.println(strlist(permutation)+" -> " + val + " sum = " + sum);
+                        System.out.println(String.format("%s -> %d (sum = %d)",
+                            strlist(permutation), val, sum));
                         bag.add(val);
                     }
                 }
