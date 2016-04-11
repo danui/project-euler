@@ -59,11 +59,50 @@ public class Problem32 implements Problem {
     private String solve() throws InterruptedException {
         executorService.submit(new PermutationTask());
         List<Integer> permutation;
-        while (null != (permutation = permutationQueue.take())) {
-            System.out.println(strlist(permutation));
+        Long sum = 0L;
+        TreeSet<Long> bag = new TreeSet<>();
+        while (null != (permutation = permutationQueue.poll(100,
+            TimeUnit.MILLISECONDS))) {
 
+            Integer[] ary = permutation.toArray(new Integer[0]);
+            for (int c=4; c <= 5; ++c) {
+                for (int b=1; b <= 9-c-1; ++b) {
+                    int a=9-b-c;
+                    Long val = filter(ary, a, b, c);
+                    if (val > 0 && !bag.contains(val)) {
+                        sum += val;
+                        System.out.println(strlist(permutation)+" -> " + val + " sum = " + sum);
+                        bag.add(val);
+                    }
+                }
+            }
         }
-        return "TODO";
+        executorService.shutdownNow();
+        executorService.awaitTermination(100, TimeUnit.MILLISECONDS);
+        return sum.toString();
+    }
+
+    private long filter(Integer[] ary, int a, int b, int c) {
+        int i = 0;
+        long multiplicand = 0;
+        long multiplier = 0;
+        long product = 0;
+        for (; i < a; ++i) {
+            multiplicand *= 10;
+            multiplicand += ary[i];
+        }
+        for (; i < a+b; ++i) {
+            multiplier *= 10;
+            multiplier += ary[i];
+        }
+        for (; i < a+b+c; ++i) {
+            product *= 10;
+            product += ary[i];
+        }
+        if (multiplicand * multiplier == product) {
+            return product;
+        }
+        return 0;
     }
 
     private String strlist(List<Integer> list) {
