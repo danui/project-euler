@@ -7,7 +7,7 @@
 ----------------------------------------------------------------------
 ## Python Code
 
-Python code can be found in using-python
+Python code can be found in solutions/python
 
 Run Python code as follows; e.g. Problem 1
 
@@ -16,7 +16,7 @@ Run Python code as follows; e.g. Problem 1
 ----------------------------------------------------------------------
 ## C Code
 
-C code can be found in using-c.  The Scons build-system is used.
+C code can be found in solutions/c.  The Scons build-system is used.
 
     http://www.scons.org/
 
@@ -31,7 +31,7 @@ Run C programs as follows; e.g. Problem 8
 ----------------------------------------------------------------------
 ## Java Code
 
-Java code can be found in using-java.  The maven build-system is used.
+Java code can be found in solutions/java.  The maven build-system is used.
 
     $ mvn package
 
@@ -41,3 +41,15 @@ follows.
 
     $ java -jar target/euler.jar 24
     Problem 24 completed in 0 milliseconds. Answer is 2783915460
+
+----------------------------------------------------------------------
+## Jupyter Notebooks
+
+Jupyter Notebook can be found in solutions/jupyter. You can start the
+Jupyter Notebook server as follows:
+
+    $ jupyter notebook
+
+
+
+[EOF]: end-of-file
